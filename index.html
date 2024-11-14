@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salvar como JSON</title>
+    <title>PayPal Checkout</title>
+    <script src="https://www.paypal.com/sdk/js?client-id=AWMY5_RjDc9Rl7rj_skoVuyARtkFWE0MbGmRSuuwnvLwruyMcyJ5GnMLjqH8gtuvPYZh0ERV2NjowB59&currency=USD"></script>
 </head>
 <body>
-    <h1>Salvar Dados como Arquivo JSON</h1>
-    <textarea id="jsonInput" rows="4" cols="50" placeholder='Escreva dados JSON...'></textarea><br><br>
-    <button onclick="salvarComoJSON()">Salvar como JSON</button>
 
-    <script>
-        function salvarComoJSON() {
-            let dados;
-            try {
-                // Tenta analisar os dados como JSON
-                dados = JSON.parse(document.getElementById("jsonInput").value);
-            } catch (e) {
-                alert("Erro: Dados inválidos. Por favor, insira JSON válido.");
-                return;
-            }
+<h2>Pagamento com PayPal</h2>
 
-            const blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
+<div id="paypal-button-container"></div>
 
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "dados.json";
-            a.click();
-
-            URL.revokeObjectURL(url);
+<script>
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        currency_code: 'USD',
+                        value: '10.00'  // Defina o valor do pagamento aqui
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert('Pagamento realizado com sucesso por ' + details.payer.name.given_name);
+            });
+        },
+        onError: function(err) {
+            console.error('Erro durante o processo de pagamento:', err);
         }
-    </script>
+    }).render('#paypal-button-container');
+</script>
+
 </body>
 </html>
