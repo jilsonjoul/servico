@@ -3,36 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captura de Parâmetros</title>
+    <title>Salvar como JSON</title>
 </head>
 <body>
-    <h1>Captura de Parâmetros da URL</h1>
-    <div id="output"></div>
-    
-    <script>
-        // Captura os parâmetros da URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const paymentId = urlParams.get("paymentId");
-        const token = urlParams.get("token");
-        const payerId = urlParams.get("PayerID");
+    <h1>Salvar Dados como Arquivo JSON</h1>
+    <textarea id="jsonInput" rows="4" cols="50" placeholder='Escreva dados JSON...'></textarea><br><br>
+    <button onclick="salvarComoJSON()">Salvar como JSON</button>
 
-        // Exibe os parâmetros na página
-        document.getElementById("output").innerHTML = `
-            <p>Payment ID: ${paymentId}</p>
-            <p>Token: ${token}</p>
-            <p>Payer ID: ${payerId}</p>
-        `;
-        
-        // Enviar para um servidor (opcional)
-        /*
-        fetch("https://seuservidor.com/processar_pagamento", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paymentId, token, payerId })
-        }).then(response => response.json())
-          .then(data => console.log("Resposta do servidor:", data))
-          .catch(error => console.error("Erro ao enviar dados:", error));
-        */
+    <script>
+        function salvarComoJSON() {
+            let dados;
+            try {
+                // Tenta analisar os dados como JSON
+                dados = JSON.parse(document.getElementById("jsonInput").value);
+            } catch (e) {
+                alert("Erro: Dados inválidos. Por favor, insira JSON válido.");
+                return;
+            }
+
+            const blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "dados.json";
+            a.click();
+
+            URL.revokeObjectURL(url);
+        }
     </script>
 </body>
 </html>
