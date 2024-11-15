@@ -26,12 +26,14 @@
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                let paymentId=details.id;
-                let paymentDate=details.create_time;
-                let payerEmail=details.payer.email_address;
-                let payerID=details.payer.payer_id;
-                let transationStatus=detais.status;
-                alert('Pagamento realizado com sucesso por ' + details.payer.name.given_name + ' PagamentoID' +paymentId);
+                let paymentId =   details.id;
+                let paymentDate = details.create_time;
+                let payerEmail =  details.payer.email_address;
+                let payerID =     details.payer.payer_id;
+                let transationStatus=details.status;
+                alert('Pagamento realizado com sucesso por ' + details.payer.name.given_name + ' Pagamento ID' + paymentId);
+                console.log('Data do pagamento : ${paymentDate}');
+                
             });
         },
         onError: function(err) {
