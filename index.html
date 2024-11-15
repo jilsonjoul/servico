@@ -26,7 +26,12 @@
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                alert('Pagamento realizado com sucesso por ' + details.payer.name.given_name);
+                let paymentId=details.id;
+                let paymentDate=details.create_time;
+                let payerEmail=details.payer.email_address;
+                let payerID=details.payer.payer_id;
+                let transationStatus=detais.status;
+                alert('Pagamento realizado com sucesso por ' + details.payer.name.given_name + ' PagamentoID' +paymentId);
             });
         },
         onError: function(err) {
